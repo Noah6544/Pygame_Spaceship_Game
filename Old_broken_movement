@@ -30,7 +30,7 @@ def draw():
 def player():
     screen.blit(spaceship, (player1_x, player1_y))
 
-
+//comment ignore
 def enemy():
     screen.blit(spaceship, (enemyx, enemyy))
 

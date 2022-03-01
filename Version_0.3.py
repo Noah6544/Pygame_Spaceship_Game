@@ -66,7 +66,6 @@ class Player:
             #value of:   w  s   a   d
 
     def border_large(self):
-        print(self.x,self.y)
         if self.x >= 1259:
             self.x = 1259
         elif self.x < -19:
@@ -79,22 +78,18 @@ class Player:
 
     def tagged(self):
         if self.is_it == True:
-            print("I got tagged!")
             self.is_it = False
             self.image = spaceship_it
         elif self.is_it == False:
-            print("I tagged them!")
             self.is_it = True
             self.image = player1ship
 
     def dice_roll():
         dice_roll = random.randint(0, 100)
         if dice_roll > 50:
-            print("Player 1 is it!")
             player1.is_it = True
             player2.is_it = False
         else:
-            print("Player 2 is it!")
             player2.is_it = True
             player1.is_it = False
 
@@ -264,7 +259,6 @@ player2 = arrow_key_player(200,300,0,0,119,115,97,100,player1ship,spaceship_it,F
 
 # FUNCTIONS
 def menu():
-    print("FIRST FIRST")
     screen_boolean = "large" #input(" Large or small screen ") #Small is false, true is large
     if screen_boolean == "small":
         # Screen

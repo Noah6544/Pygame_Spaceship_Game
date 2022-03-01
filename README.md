@@ -1,6 +1,7 @@
 # Pygame_Spaceship_Game
 Little spaceship game I'm working on in freetime to learn pygame more.
 ## Reason
+- Improve python skills in general, learn OOP more, learn pygame.
 - The reason to make the game is to learn pygame more and to have a game to show to my friends to impress them, obviously. 
 - I also need something to occupy me in my free period so this is a great little project.
 ## Game Objective:

@@ -20,7 +20,6 @@ Also doing some laptop coding on the drive back for about 2 or so hours.
   - An ending UI prompting players to play again/go to another minigame.
  
 # Version 0.3 (3/1/22)
-Accomplished A LOT in this version so far
 
 Accomplished A LOT in this version so far
 

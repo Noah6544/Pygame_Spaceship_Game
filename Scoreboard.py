@@ -1,11 +1,11 @@
 import pygame
 from loading_images_and_variables import *
 import random
-class Scoreboard():
+class Scoreboard:
     def __init__(self):
         self.font = pygame.font.SysFont("sitkasmallsitkatextitalicsitkasubheadingitalicsitkaheadingitalicsitkadisplayitalicsitkabanneritalic",50)
         self.clock_font = pygame.font.SysFont("franklingothicmedium",100)
-        self.counter = 2
+        self.counter = 5
         self.text_counter = str(self.counter)
         self.render_font = self.clock_font.render(str(self.text_counter), True, (255, 255, 255))
         self.clock_render_font = self.clock_font.render(str(self.text_counter), True, (0, 0, 0))

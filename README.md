@@ -37,3 +37,27 @@ Accomplished A LOT in this version so far
  - Create a looping game mode: a timer counting down and point awarded for tags. Most tags win
 
 I think this game is slighty fun with friends as everyone I've played with enjoys it for at least a minute before it gets repetitive because there's no goal, but I'm just working on bare bones now, polish beginning soon.
+
+# Version 0.4 😪
+
+Summary: 😔 Mainly just debugging for a month, but I implemented A LOT of important things in this version
+### Completed:
+- Made a visual timer system in which the player who is not it gains a point every second they manage to not be tagged, and at the end of a minute the player with the more points wins
+- A random dice roll feature which randomly picks the player who is it.
+- I don't remember everything I added, even though it wasn't a lot for a months work, because I was debugging for the majority of the time
+
+### ToDo:
+ - Make the timer system more visually pleasing, scale the timer system for the smaller scale game
+- Fix the smaller scale game, the timer is scaled wrong, and the place holder "it" images aren't working.
+
+### Known Issues:
+ - The smaller scale game is just broken, everything about it is broken. I need to work on it before it gets so far behind the large scale game that I can't remember how to implement the changes
+
+### Debug rant:
+I had a bug which the players weren't decreasing speed, and the placeholder image for who's it was remaing and both players were it. There was also issues where they had the same speed. This took over a month to resolve, and I debugged so much (going into, retrospectively, unnecessary things, such as the movement, trying to fix it. I broke the movement at one point because I thought that was the fix.
+The actual fixes were quite simple of course, just had to keep consistently coming back and chip away at it. 
+
+Lots of fun but this update drained me, took so many hours of unsuccessful debugging but I learned a lot about perseverance and PyCharm debugger. 
+I also re-read this whole file about 20 times so at least I understand more.
+
+

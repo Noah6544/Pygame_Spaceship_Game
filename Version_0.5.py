@@ -15,10 +15,14 @@ class Display:
         self.size = size
         self.width,self.height = size
         self.screen = pygame.display.set_mode((self.width, self.height))
+        self.play_again_hitbox_left = pygame.Rect(5, 300, 300, 300)
+        self.play_again_hitbox_right = pygame.Rect(1065, 300, 300, 300)  #values: moving leftright, up/down, width, heigh
+
         if self.size == (800,600):
             self.is_large = False # False mean small
         elif self.size == (1366, 768):
             self.is_large = True #True means large
+
 
     def display(self):
         pygame.display.set_mode((self.width, self.height))
@@ -26,10 +30,28 @@ class Display:
     def blit(self,background,location):
        self.screen.blit(background,(location))
 
-    def draw_large(self):
-        player1.draw_player_large(self.screen)
-        player2.draw_player_large(self.screen)
-        pygame.display.update()
+    def draw_large(self): #updates
+        if scoreboard.counter >= 0:
+            player1.draw_player_large(self.screen)
+            player2.draw_player_large(self.screen)
+            pygame.display.update()
+        elif scoreboard.counter < 0:
+            if player1.won:
+                player1.draw_player_large(self.screen)
+                self.blit(scoreboard.draw_text("Player 1 Wins"), (470, 20))
+            if player2.won:
+                player2.draw_player_large(self.screen)
+                self.blit(scoreboard.draw_text("Player 2 Wins"), (470, 20))
+
+            #print("player1.x = {0}".format(player1.x))
+            #print("player1.y = {0}".format(player1.y)).
+            #print("player2.x = {0}".format(player2.x))
+            #print("player2.y = {0}".format(player2.y)).
+            pygame.draw.rect(self.screen, (255, 0, 0), self.play_again_hitbox_right,1)
+            pygame.draw.rect(self.screen, (10, 10, 255), self.play_again_hitbox_left,1)
+
+            pygame.display.update()
+
 
     def draw_small(self):
         player1.draw_player_small(self.screen)
@@ -63,8 +85,29 @@ class Display:
             Player.collide_small_screen(player1,player2)
             self.draw_small()
 
-#    def main_loop_executions(self):
-
+    def win_loop_actions(self): # a function just to clean up the main loop things that happen each loop
+        if player1.won:
+            keys_pressed = pygame.key.get_pressed()
+            player1.wasd_handlemovement(keys_pressed)
+            player1.y += player1.playerychange
+            player1.x += player1.playerxchange
+        elif player2.won:
+            keys_pressed = pygame.key.get_pressed()
+            player2.arrow_key_handlemovement(keys_pressed)
+            player2.x += player2.playerxchange
+            player2.y += player2.playerychange
+        if self.is_large: #if the screen is large
+            if player1.won:
+                player1.border_large()
+            elif player2.won:
+                player2.border_large()
+            self.draw_large()
+        elif not self.is_large: #if the screen is small
+            if player1.won:
+                player1.border_small()
+            elif player2.won:
+                player2.border_small()
+            self.draw_small()
 
 # FUNCTIONS
 
@@ -90,18 +133,37 @@ def menu(): #ToDo: implement this as a gui in pygame menu. This is a temp placeh
 
 def win_screen(screen):
     global player1, player2, size, scoreboard
-    if player1.tag_score > player2.tag_score:
-        player2.x = 100000
-        player2.y = 10000000
+    running = True
+    clock = pygame.time.Clock()
+    player1.move(566, 345)
+    player2.move(566, 345)
+    while running:
+        clock.tick(FPS)
+        screen.fill(black_background)
+        for event in pygame.event.get():
+            # while play_again:
+            if event.type == pygame.QUIT:  # if you press on the exit in the top right then it will stop the program
+                running = False
+            if player1.tag_score > player2.tag_score: #if player 1 wins
+                player1.won = True
+                player2.won = False
+                player2.move(10000,1000)
+                screen.draw_large()
+            if player2.tag_score > player1.tag_score: #if player 2 wins
+                player2.won = True
+                player1.won = False
 
-        screen.blit(scoreboard.draw_text("PLAYER 1 WINS"), (screen.width / 2, screen.height / 2))
-        screen.draw_large()
-    if player2.tag_score > player1.tag_score:
-        player1.x = 10000000
-        player1.y = 1000000
+                player1.move(10000,10000)
+                screen.draw_large()
+            if player2.tag_score == player1.tag_score: #this is if I'm debugging just the win loop
+                player1.won = True
+                player2.won = False
+                player1.move(365, 768)
+                player2.move(10000, 1000)
+                screen.draw_large()
 
-        screen.blit(scoreboard.draw_text("PLAYER 2 WINS"), (600, 300))
-        screen.draw_large()
+
+        Display.win_loop_actions(screen)
 
 
 def main():
@@ -131,7 +193,7 @@ def main():
                     player1.tag_score += 1
                 if scoreboard.counter < 0:  # if the game timer runs out
                     win_screen(screen)
-                    break
+
 
         Display.main_loop_actions(screen)
 
@@ -143,4 +205,3 @@ scoreboard.dice_roll()
 player1 = wasd_player(936,200,0,0,pygame.K_w,pygame.K_s,pygame.K_a,pygame.K_d, player1ship,spaceship_it,scoreboard.player1_bool())
 player2 = arrow_key_player(200,300,0,0,pygame.K_UP,pygame.K_DOWN,pygame.K_LEFT,pygame.K_RIGHT, player1ship,spaceship_it,scoreboard.player2_bool())
 main()
-

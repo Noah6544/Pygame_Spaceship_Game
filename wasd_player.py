@@ -62,3 +62,4 @@ class wasd_player(Player):
         self.tagged()
         self.x, self.y = 200, 300
         pygame.time.delay(1000) # only one function needs this, not both, because it will delay the entire game.
+

@@ -16,7 +16,6 @@ class Player:
         self.image = not_it_image
         self.it_image = it_image #this is the image it will switch to when tagged, helps show which player is it.
         self.not_it_image_small = not_it_image
-
         self.image_small = pygame.transform.scale(self.not_it_image_small,(100,100))
         self.it_image_small = pygame.transform.scale(spaceship_it,(100,100))
         #hitboxes are pygame rectangle objects
@@ -26,8 +25,10 @@ class Player:
         self.body_hitbox_small = pygame.Rect(self.x + 37, self.y + 6, 25, 90)
         self.is_it = is_it # a simple boolean to check if you're it (True) or not it (False)
         self.tag_score = 0
-
-
+        self.won = None
+        self.CONSTANT_VELOCITY = 7
+        self.VELOCITY = 7
+        self.VELOCITY_it = 9
 
 #handels hitboxes creation for player, and handles drawing image
     def draw_player_small(self, win):
@@ -100,3 +101,7 @@ class Player:
                 or pygame.Rect.colliderect(player1.body_hitbox_small, player2.body_hitbox_small):
             player1.collide()
             player2.collide()
+
+    def move(self,x,y):
+        self.x = x
+        self.y = y

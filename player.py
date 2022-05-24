@@ -26,8 +26,8 @@ class Player:
         self.is_it = is_it # a simple boolean to check if you're it (True) or not it (False)
         self.tag_score = 0
         self.won = None
-        self.CONSTANT_VELOCITY = 7
-        self.VELOCITY = 7
+        self.CONSTANT_VELOCITY = 15
+        self.VELOCITY = 15
         self.VELOCITY_it = 9
 
 #handels hitboxes creation for player, and handles drawing image

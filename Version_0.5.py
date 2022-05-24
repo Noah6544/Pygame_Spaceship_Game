@@ -49,7 +49,8 @@ class Display:
             #print("player2.y = {0}".format(player2.y)).
             pygame.draw.rect(self.screen, (255, 0, 0), self.play_again_hitbox_right,1)
             pygame.draw.rect(self.screen, (10, 10, 255), self.play_again_hitbox_left,1)
-
+            self.blit(scoreboard.draw_text("PLAY AGAIN?"),(350,400))
+            self.blit(scoreboard.draw_text("Yes"),(120,400))
             pygame.display.update()
 
 
@@ -152,7 +153,6 @@ def win_screen(screen):
             if player2.tag_score > player1.tag_score: #if player 2 wins
                 player2.won = True
                 player1.won = False
-
                 player1.move(10000,10000)
                 screen.draw_large()
             if player2.tag_score == player1.tag_score: #this is if I'm debugging just the win loop
@@ -161,7 +161,6 @@ def win_screen(screen):
                 player1.move(365, 768)
                 player2.move(10000, 1000)
                 screen.draw_large()
-
 
         Display.win_loop_actions(screen)
 
@@ -194,10 +193,11 @@ def main():
                 if scoreboard.counter < 0:  # if the game timer runs out
                     win_screen(screen)
 
-
         Display.main_loop_actions(screen)
 
     pygame.quit()
+
+
 
 scoreboard = Scoreboard()
 scoreboard.dice_roll()

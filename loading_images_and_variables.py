@@ -22,8 +22,8 @@ black_background = ((0,0,0))
 
 # variables
 FPS = 60
-CONSTANT_VELOCITY = 7
-VELOCITY = 7
+CONSTANT_VELOCITY = 15
+VELOCITY = 15
 VELOCITY_it = 9 #Values of 5 isn't too bad, lets the "it" player try to slowly box the other player in to make the tag
                 #24while still alowing the other player a chance to escape, will continue playing around with the value
                 # for perfect balance

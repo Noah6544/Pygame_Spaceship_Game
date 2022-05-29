@@ -1,7 +1,14 @@
 import pygame
-from loading_images_and_variables import *
+import settings
+from settings import *
 import random
 class Player:
+
+
+
+
+
+
     def __init__(self, x, y,playerxchange,playerychange,key_up, key_down, key_left, key_right, not_it_image,it_image,is_it):
         self.x = x
         self.y = y
@@ -26,9 +33,13 @@ class Player:
         self.is_it = is_it # a simple boolean to check if you're it (True) or not it (False)
         self.tag_score = 0
         self.won = None
-        self.CONSTANT_VELOCITY = 15
-        self.VELOCITY = 15
-        self.VELOCITY_it = 9
+        self.Velocity = 15
+        self.Constant_Velocity = 15
+        self.Velocity_it = 9  # Values of 5 isn't too bad, lets the "it" player try to slowly box the other player in to make the tag
+        # 24while still alowing the other player a chance to escape, will continue playing around with the value
+        # for perfect balance
+        self.Velocity_End_Screen = 10
+
 
 #handels hitboxes creation for player, and handles drawing image
     def draw_player_small(self, win):
@@ -71,6 +82,9 @@ class Player:
         elif self.is_it == False:
             self.image = self.not_it_image
 
+    def set_winner_image(self):
+        self.image = self.not_it_image
+        self.Velocity = self.Velocity_End_Screen
 
     def tagged(self):
         if self.is_it == True:
@@ -83,15 +97,55 @@ class Player:
             self.image = self.it_image
             return True
 
-    def collide_large_screen(player1,player2):
+    def collide_large_screen(player1, player2, Display_Yes_hitbox, Display_No_hitbox):
+        global play_again
+
         # this if statements checks if the players hitboxes have collided with pygame.Rect.colliderect for each case
         # (body to body, wing to wing, wing to body)
-        if pygame.Rect.colliderect(player1.wing_hitbox_large,player2.wing_hitbox_large)\
-                or pygame.Rect.colliderect(player1.body_hitbox_large,player2.wing_hitbox_large)\
-                or pygame.Rect.colliderect(player1.wing_hitbox_large, player2.body_hitbox_large)\
-                or pygame.Rect.colliderect(player1.body_hitbox_large, player2.body_hitbox_large):
-            player1.collide()
-            player2.collide()
+        if not player1.won or not player2.won:
+            if pygame.Rect.colliderect(player1.wing_hitbox_large,player2.wing_hitbox_large)\
+                    or pygame.Rect.colliderect(player1.body_hitbox_large,player2.wing_hitbox_large)\
+                    or pygame.Rect.colliderect(player1.wing_hitbox_large, player2.body_hitbox_large)\
+                    or pygame.Rect.colliderect(player1.body_hitbox_large, player2.body_hitbox_large):
+                player1.collide()
+                player2.collide()
+
+        if player1.won:
+            if pygame.Rect.colliderect(player1.wing_hitbox_large, Display_Yes_hitbox) \
+                    or pygame.Rect.colliderect(player1.body_hitbox_large, Display_Yes_hitbox):  # if player 1 collides with yes
+                settings.play_again = True
+                return True
+
+            elif pygame.Rect.colliderect(player1.wing_hitbox_large, Display_No_hitbox) \
+                    or pygame.Rect.colliderect(player1.body_hitbox_large, Display_No_hitbox):  # if player 1 collides with No:
+                print("why")
+                settings.play_again = False
+                return False
+            else:
+                return None
+
+        elif player2.won:
+            if pygame.Rect.colliderect(player2.wing_hitbox_large, Display_Yes_hitbox)\
+                    or pygame.Rect.colliderect(player2.body_hitbox_large, Display_Yes_hitbox): #if player 2 collides with yes
+                settings.play_again = True
+                return True
+            elif pygame.Rect.colliderect(player2.wing_hitbox_large, Display_No_hitbox)\
+                    or pygame.Rect.colliderect(player2.body_hitbox_large, Display_No_hitbox): #if player 2 collides with No:
+                print("why")
+                settings.play_again = False
+                return False
+
+            else:
+                return None
+
+
+        if settings.play_again:
+            return True
+        elif not settings.play_again:
+            return False
+
+ #       if self.won == True:
+  #          if pygame.Rect.collidedict(player1.wing_hitbox_large,)
 
 
     def collide_small_screen(player1,player2):

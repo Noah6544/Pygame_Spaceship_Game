@@ -3,7 +3,6 @@ import pygame
 import random
 import settings
 from settings import *
-from settings import black_background
 
 
 from player import Player
@@ -23,6 +22,7 @@ class Display:
             self.is_large = False # False mean small
         elif self.size == (1366, 768):
             self.is_large = True #True means large
+        self.x_y_center = (self.width/2,self.height/2)
     def display(self):
         pygame.display.set_mode((self.width, self.height))
     def blit(self,background,location):
@@ -35,17 +35,23 @@ class Display:
         elif scoreboard.counter < 0:
 
             if player1.won:
-                self.blit(scoreboard.draw_text("Player 1 Wins",(255,255,255)), (470, 20))
                 player1.draw_player_large(self.screen)
+                self.blit(background=scoreboard.draw_text("Player 1 Wins",(255,255,255),scoreboard.clock_font),
+                          location=scoreboard.draw_text_location("Player 1 Wins",(settings.white),scoreboard.clock_font,self,0,-300))
             if player2.won:
-                self.blit(scoreboard.draw_text("Player 2 Wins",(255,255,255)), (470, 20))
-
                 player2.draw_player_large(self.screen)
+
+                self.blit(background=scoreboard.draw_text("Player 2 Wins", (255, 255, 255), scoreboard.clock_font),
+                          location=scoreboard.draw_text_location("Player 2 Wins", (settings.white), scoreboard.clock_font, self,
+                                                                 0, -300))
+
             pygame.draw.rect(self.screen, (255, 0, 0), self.play_again_hitbox_right,2)
             pygame.draw.rect(self.screen, (10, 10, 255), self.play_again_hitbox_left,3)
-            self.blit(scoreboard.draw_text("Play Again?",(255,255,255)),(476,600))
-            self.blit(scoreboard.draw_text("Yes",(0,0,255)),(110,360))
-            self.blit(scoreboard.draw_text("No",(255,0,0)),(1180,360)) #ToDo Polish these positions to be pixel perfect and cleaner.
+            self.blit(background=scoreboard.draw_text("Play Again?",(255,255,255),scoreboard.font),
+                      location=scoreboard.draw_text_location("Play Again?",(255,255,255),scoreboard.font,self,0,280))
+            self.blit(scoreboard.draw_text("Yes",(0,0,255),scoreboard.font),(110,360))
+            self.blit(scoreboard.draw_text("No",(255,0,0),scoreboard.font),(1180,360))
+
             pygame.display.update()
 
 
@@ -57,11 +63,23 @@ class Display:
     def fill(self,color):
         self.screen.fill(color)
 
+    def blit_random_collide_phrase(self,screen):
+        screen.fill(black)
+        temp_random_collide_phrase = settings.random_collide_phrase()
+        print(temp_random_collide_phrase)
+        Surface_text = Scoreboard.draw_text(self=scoreboard,text=temp_random_collide_phrase, color=settings.white,
+                                            font=settings.collide_font)
+
+        x_vary,y_vary = random.randint(1,25),random.randint(1,25)
+        self.blit(background=Surface_text,location=(214+x_vary, 132+y_vary))
+        pygame.display.update()
     def main_loop_actions(self): # a function just to clean up the main loop things that happen each loop
         if scoreboard.counter >= 0:
-            self.blit(scoreboard.draw_timer(str(scoreboard.text_counter)), (683, 384))
-            self.blit(scoreboard.draw_text("Score: " + str(player1.tag_score),(255,255,255)), (player1.x - 20, player1.y - 80))
-            self.blit(scoreboard.draw_text("Score: " + str(player2.tag_score),(255,255,255)), (player2.x - 20, player2.y - 80))
+            self.blit(background=scoreboard.draw_text(str(scoreboard.text_counter),(255,255,255),scoreboard.clock_font,), #drawing the counter
+                        location=scoreboard.draw_text_location(str(scoreboard.text_counter),(255,255,255),scoreboard.clock_font,self,0,0))
+
+            self.blit(background=scoreboard.draw_text("Score: " + str(player1.tag_score),(255,255,255),scoreboard.font),location= (player1.x - 20, player1.y - 80))
+            self.blit(scoreboard.draw_text("Score: " + str(player2.tag_score),(255,255,255),scoreboard.font), (player2.x - 20, player2.y - 80))
         keys_pressed = pygame.key.get_pressed()
         player1.wasd_handlemovement(keys_pressed)
         player2.arrow_key_handlemovement(keys_pressed)
@@ -72,7 +90,7 @@ class Display:
         if self.is_large: #if the screen is large
             player1.border_large()
             player2.border_large()
-            Player.collide_large_screen(player1,player2,self.play_again_hitbox_left,self.play_again_hitbox_right)
+            Player.collide_large_screen(player1,player2,self.play_again_hitbox_left,self.play_again_hitbox_right,scoreboard,self)
             self.draw_large()
 
         elif not self.is_large: #if the screen is small
@@ -97,14 +115,14 @@ class Display:
                 player1.border_large()
             elif player2.won:
                 player2.border_large()
-            if Player.collide_large_screen(player1,player2,self.play_again_hitbox_left,self.play_again_hitbox_right): #if they select yes
+            if Player.collide_large_screen(player1,player2,self.play_again_hitbox_left,self.play_again_hitbox_right,scoreboard,Display): #if they select yes
                 self.draw_large()
                 return True
-            elif Player.collide_large_screen(player1,player2,self.play_again_hitbox_left,self.play_again_hitbox_right): #if they select no
+            elif Player.collide_large_screen(player1,player2,self.play_again_hitbox_left,self.play_again_hitbox_right,scoreboard,Display): #if they select no
                 self.draw_large()
                 return False
 
-            elif Player.collide_large_screen(player1,player2,self.play_again_hitbox_left,self.play_again_hitbox_right) == None:
+            elif Player.collide_large_screen(player1,player2,self.play_again_hitbox_left,self.play_again_hitbox_right,scoreboard,Display) == None:
                 pass
 
             else:
@@ -149,8 +167,11 @@ def win_screen(screen):
     clock = pygame.time.Clock()
     player2.set_winner_image()
     player1.set_winner_image()
+    player1.Velocity_End_Screen, player2.Velocity_End_Screen = 4, 4 #slow the player down so that they don't accidentally move to either option while the game runs out
 
-    screen.fill(black_background)
+
+
+    screen.fill(black)
 
     while running:
         clock.tick(FPS)
@@ -160,7 +181,6 @@ def win_screen(screen):
                 running = False
 
         Display_win_loop_actions_bool = Display.win_loop_actions(screen)
-
         if Display_win_loop_actions_bool: #if they select yes
             running = False
             return True
@@ -187,7 +207,7 @@ def main():
     pygame.display.update()
     while running:
         clock.tick(FPS)
-        screen.fill(black_background)
+        screen.fill(black)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:  # if you press on the exit in the top right then it will stop the program
                 pygame.quit()
@@ -203,17 +223,19 @@ def main():
                         player1.won = True
                         player2.won = False
                         player2.move(10000, 1000)
-                        player1.move(300,350)
+                        player1.move(614,332)
+                        #player1.move(player1.body_hitbox_large.centerx,player1.body_hitbox_large.centery) was an attempt but its bugged
                     if player2.tag_score > player1.tag_score:  # if player 2 wins
                         player2.won = True
                         player1.won = False
                         player1.move(10000, 10000)
-                        player2.move(300,350)
+                        player2.move(614, 332)
                     elif player2.tag_score == player1.tag_score:  # this is if I'm debugging just the win loop
                         player1.won = True
                         player2.won = False
-                        player1.move(365, 768)
-                        player2.move(10000, 1000)
+                        player1.move(614, 332)
+                        player2.move(1000000, 10000000)
+
 
                     win_screen_bool = win_screen(screen)
                     if win_screen_bool == True:

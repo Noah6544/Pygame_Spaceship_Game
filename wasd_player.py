@@ -3,8 +3,8 @@ import random
 from loading_images_and_variables import *
 from player import Player
 class wasd_player(Player):
-    def __init__(self, x, y, playerxchange,playerychange,key_up, key_down, key_left, key_right, image,it_image,is_it):
-        super().__init__(x, y,playerxchange,playerychange, key_up, key_down, key_left, key_right, image, it_image,is_it)
+    def __init__(self, x, y, playerxchange,playerychange,key_up, key_down, key_left, key_right, image,it_image,is_it,player_name):
+        super().__init__(x, y,playerxchange,playerychange, key_up, key_down, key_left, key_right, image, it_image,is_it,player_name)
 
 
 

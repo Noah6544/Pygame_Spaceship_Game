@@ -1,4 +1,8 @@
 import pygame
+import random
+
+
+pygame.init()
 #Loading Images
 background = pygame.transform.scale(pygame.image.load("images//stars.jpg"),(1920,1279))
 
@@ -17,8 +21,17 @@ galactic_background = "images//stars.jpg"
 hubble_skyfullofstars_background = "images//hubble famous image.jpg"
 plain_background = ((231,233,206))
 plain_background_2 = ((244,227,204))
-black_background = ((0,0,0))
+black = ((0,0,0))
+white = (255,255,255)
+random_collide_phrases = ["Gotcha!", "Finally!!!", "You're it!", "Tag!", "Ha, you suck!", "Almost got away!",
+                               "I'm just better.", "You could never get away.", "BAng!", "Terron is money",
+                               "AYEE", "Nice one!!" "What'd you say??", "Got you!", "too easy honestly.",
+                               "oops", "hey lets go!", "LETS GOOOO!!!", "I'm not even trying bro","it doesn't count I'm not trying",]
 
+collide_font = pygame.font.SysFont("C:\\Users\\Noah\'s Marc P. 4648\\AppData\\Local\\Microsoft\\Windows\\Fonts\\it font.tff",100) #putting this in settings because I'm getting an error with it being in scoreboard for some reason
+
+def random_collide_phrase():
+    return random.choice(random_collide_phrases)
 
 # variables
 global play_again

@@ -5,7 +5,7 @@ class Scoreboard:
     def __init__(self):
         self.font = pygame.font.SysFont("centurygothic",45)
         self.clock_font = pygame.font.SysFont("centurygothic",50)
-        self.counter = 2
+        self.counter = 60
         self.text_counter = str(self.counter)
         self.dice_roll_num = random.randint(0, 100)
         self.player1_is_it = False
